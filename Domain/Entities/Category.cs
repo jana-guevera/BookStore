@@ -4,14 +4,14 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace Domain
+namespace Domain.Entities
 {
     public class Category
     {
         [Key]
         public int Id { get; set; }
 
-        [Required(ErrorMessage ="The category name is required")]
+        [Required(ErrorMessage = "The category name is required")]
         [MaxLength(100)]
         public string Name { get; set; }
 
