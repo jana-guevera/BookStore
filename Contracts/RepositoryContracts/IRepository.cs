@@ -9,44 +9,46 @@ namespace Contracts.RepositoryContracts
     public interface IRepository<T> where T : class
     {
         /// <summary>
-        /// Add the record to the table and returns the record
+        /// Add the <typeparamref name="T"/> to the table and returns the <typeparamref name="T"/>
         /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        Task<T> Add(T item);
+        /// <param name="record"></param>
+        /// <returns><typeparamref name="T"/></returns>
+        Task<T> AddAsync(T record);
 
         /// <summary>
-        /// Update the record from the table and returns the record
+        /// Update the <typeparamref name="T"/> from the table and returns the <typeparamref name="T"/>
         /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        Task<T> Update(T item);
+        /// <param name="record"></param>
+        /// <returns><typeparamref name="T"/></returns>
+        Task<T> UpdateAsync(T record);
 
         /// <summary>
-        /// Removes a record from the table and returns the record
+        /// Removes a <typeparamref name="T"/> from the table and returns the <typeparamref name="T"/>
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        Task<T> Remove(int id);
+        /// <param name="record"></param>
+        /// <returns><typeparamref name="T"/></returns>
+        Task<T> RemoveAsync(T record);
 
         /// <summary>
-        /// Find and returns single record based on the provided expression
+        /// Find and returns single <typeparamref name="T"/> based on the provided expression
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns><typeparamref name="T"/></returns>
+        Task<T> FindOneAsync(Expression<Func<T, bool>> filter);
+
+        /// <summary>
+        /// Find and returns multiple <typeparamref name="T"/> based on the provided expression
         /// </summary>
         /// <param name="filter"></param>
         /// <returns></returns>
-        Task<T> FindOne(Expression<Func<T, bool>> filter);
+        Task<IEnumerable<T>> FindManyAsync(Expression<Func<T, bool>> filter);
 
         /// <summary>
-        /// Find and returns multiple records based on the provided expression
-        /// </summary>
-        /// <param name="filter"></param>
-        /// <returns></returns>
-        Task<IEnumerable<T>> FindMany(Expression<Func<T, bool>> filter);
-
-        /// <summary>
-        /// Returns all the records from the table
+        /// Returns all the <typeparamref name="T"/> from the table
         /// </summary>
         /// <returns></returns>
-        Task<IEnumerable<T>> GetAll();
+        Task<IEnumerable<T>> GetAllAsync();
     }
+
+   
 }
