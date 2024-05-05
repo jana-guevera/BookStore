@@ -9,8 +9,8 @@ using Repositories.Database;
 namespace Repositories.Migrations
 {
     [DbContext(typeof(BookStoreDbContext))]
-    [Migration("20240503093634_AddCategoryTableToDb")]
-    partial class AddCategoryTableToDb
+    [Migration("20240505130411_CreateCategoryTable")]
+    partial class CreateCategoryTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,8 +32,8 @@ namespace Repositories.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(20)")
+                        .HasMaxLength(20);
 
                     b.HasKey("Id");
 
