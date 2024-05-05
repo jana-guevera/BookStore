@@ -12,8 +12,8 @@ namespace Repositories.Repos
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        private readonly BookStoreDbContext _dbContext;
-        private readonly DbSet<T> _dbSet;
+        protected readonly BookStoreDbContext _dbContext;
+        protected readonly DbSet<T> _dbSet;
 
         public Repository(BookStoreDbContext dbContext)
         {
