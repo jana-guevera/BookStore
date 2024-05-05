@@ -9,5 +9,9 @@ namespace Domain.ErrorHandling
     /// </summary>
     public class InvalidIdentityError : ApplicationError
     {
+        public InvalidIdentityError(string message) : base(message)
+        {
+            
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Domain.ErrorHandling
@@ -9,6 +10,11 @@ namespace Domain.ErrorHandling
     /// </summary>
     public class ValidationError : ApplicationError
     {
-        public Dictionary<string, string> Errors { get; set; }
+        public List<ValidationResult> Errors { get; set; }
+
+        public ValidationError(string message, List<ValidationResult> errors) : base(message)
+        {
+            Errors = errors;
+        }
     }
 }

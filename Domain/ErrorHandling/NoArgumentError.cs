@@ -9,5 +9,9 @@ namespace Domain.ErrorHandling
     /// </summary>
     public class NoArgumentError : ApplicationError
     {
+        public NoArgumentError(string message) : base(message)
+        {
+            
+        }
     }
 }

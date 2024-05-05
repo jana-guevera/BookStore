@@ -9,5 +9,9 @@ namespace Domain.ErrorHandling
     /// </summary>
     public class ApplicationError : Exception
     {
+        public ApplicationError(string message): base(message)
+        {
+            
+        }
     }
 }
