@@ -22,7 +22,7 @@ namespace Services.Helpers
             
             if (!isValid)
             {
-                throw new ValidationError("Model validation failed", validationResults);
+                throw new ModelValidationException("Model validation failed", validationResults);
             }
         }
     }

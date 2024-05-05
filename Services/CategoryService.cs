@@ -20,7 +20,7 @@ namespace Services
         public async Task<Category> AddAsync(Category category)
         {
             // Check if category is null and throw error
-            if (category == null) throw new NoArgumentError("Empty Category");
+            if (category == null) throw new NullArgumentException("Empty Category");
 
             // Validate the category data and throw error 
             ValidationHelper.ModelValidation(category);
@@ -29,7 +29,7 @@ namespace Services
             Category existingCategory = await _categoryRepository.FindByName(category.Name);
             if (existingCategory != null)
             {
-                throw new UniqueValidationError("Category Already Exists");
+                throw new UniqueValidationException("Category Already Exists");
             }
             
             // create category and return the category

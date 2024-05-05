@@ -7,9 +7,9 @@ namespace Domain.ErrorHandling
     /// <summary>
     /// Represents all errors caused by end users
     /// </summary>
-    public class ApplicationError : Exception
+    public class ApplicationException : Exception
     {
-        public ApplicationError(string message): base(message)
+        public ApplicationException(string message): base(message)
         {
             
         }

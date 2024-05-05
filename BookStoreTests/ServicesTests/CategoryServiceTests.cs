@@ -35,7 +35,7 @@ namespace BookStoreTests.ServicesTests
             Category category = null;
 
             //Act and Assert
-            await Assert.ThrowsAsync<NoArgumentError>(async () => { 
+            await Assert.ThrowsAsync<NullArgumentException>(async () => { 
                 await _categoryService.AddAsync(category); 
             });
         }
@@ -51,7 +51,7 @@ namespace BookStoreTests.ServicesTests
             Category category = new Category() { Name = name, DisplayOrder = order };
 
             //Act and Assert
-            await Assert.ThrowsAsync<ValidationError>(async () => 
+            await Assert.ThrowsAsync<ModelValidationException>(async () => 
             { 
                 await _categoryService.AddAsync(category); 
             });
@@ -65,7 +65,7 @@ namespace BookStoreTests.ServicesTests
             _categoryRepositoryMock.Setup(x => x.FindByName(It.IsAny<string>())).ReturnsAsync(category);
 
             // Act and Assert
-            await Assert.ThrowsAsync<UniqueValidationError>(async () =>
+            await Assert.ThrowsAsync<UniqueValidationException>(async () =>
             {
                 await _categoryService.AddAsync(category);
             });
