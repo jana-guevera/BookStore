@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Category>;
+
+@{
+    ViewBag.Title = "Categories";
+}
+
+
+<h2>Categories</h2>
+
+<table class="table table-striped" style="width:100%;">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Display Order</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (Category category in Model)
+        {
+            <tr>
+                <td>@category.Name</td>
+                <td>@category.DisplayOrder</td>
+                <td>
+                    <a class="btn btn-primary" asp-area="admin" asp-controller="category" 
+                    asp-action="edit" asp-route-id="@category.Id">Edit</a>
+
+                    <a class="btn btn-danger" asp-area="admin" asp-controller="category" 
+                    asp-action="remove" asp-route-id="@category.Id">Remove</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts{
+    <script>
+        let table = $('table').DataTable({
+            columnDefs: [
+                { targets: "_all", className: 'dt-head-left dt-body-left' }
+            ]
+        });
+    </script>
+}
