@@ -6,6 +6,7 @@ using Moq;
 using Services;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
@@ -62,7 +63,7 @@ namespace BookStoreTests.ServicesTests
         {
             // Arrange
             Category category = new Category() { Name = "Peter Parker", DisplayOrder = 1 };
-            _categoryRepositoryMock.Setup(x => x.FindByName(It.IsAny<string>())).ReturnsAsync(category);
+            _categoryRepositoryMock.Setup(x => x.FindOneAsync(x => x.Name == category.Name)).ReturnsAsync(category);
 
             // Act and Assert
             await Assert.ThrowsAsync<UniqueValidationException>(async () =>
@@ -79,7 +80,7 @@ namespace BookStoreTests.ServicesTests
             Category category = new Category() { Name = name, DisplayOrder = order };
             Category existingCategory = null;
 
-            _categoryRepositoryMock.Setup(x => x.FindByName(It.IsAny<string>()))
+            _categoryRepositoryMock.Setup(x => x.FindOneAsync(x => x.Name == category.Name))
                 .ReturnsAsync(existingCategory);
 
             // Act
