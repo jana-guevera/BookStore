@@ -14,10 +14,5 @@ namespace Repositories.Repos
         public CategoryRepository(BookStoreDbContext dbContext) : base(dbContext)
         {
         }
-
-        public async Task<Category> FindByName(string name)
-        {
-            return await _dbSet.FirstOrDefaultAsync(x => x.Name == name);
-        }
     }
 }

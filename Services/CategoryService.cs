@@ -26,7 +26,7 @@ namespace Services
             ValidationHelper.ModelValidation(category);
 
             // Check if there is an existing category with the same name and throw error
-            Category existingCategory = await _categoryRepository.FindByName(category.Name);
+            Category existingCategory = await _categoryRepository.FindOneAsync(x => x.Name == category.Name);
             if (existingCategory != null)
             {
                 throw new UniqueValidationException("Category Already Exists");
@@ -44,13 +44,32 @@ namespace Services
 
         public async Task<Category> UpdateAsync(Category category)
         {
-            return await _categoryRepository.UpdateAsync(category);
+            if (category == null) throw new NullArgumentException("Category is null");
+
+            Category existingCategory = await _categoryRepository.FindOneAsync(x => x.Id == category.Id);
+
+            if (existingCategory == null) return null;
+
+            existingCategory.Name = category.Name;
+            existingCategory.DisplayOrder = category.DisplayOrder;
+
+            return await _categoryRepository.UpdateAsync(existingCategory);
         }
 
         public async Task<Category> FindByIdAsync(int id)
         {
             return await _categoryRepository.FindOneAsync(x => x.Id == id);
         }   
+
+        public async Task<Category> FindByName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new NullArgumentException("Empty category name");
+            }
+
+            return await _categoryRepository.FindOneAsync(x => x.Name == name);
+        }
 
         public async Task<IEnumerable<Category>> GetAllAsync()
         {
