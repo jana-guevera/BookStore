@@ -30,11 +30,18 @@ namespace Contracts.ServicesContracts
         Task<Category> RemoveAsync(int id);
 
         /// <summary>
-        /// Find and returns a single category based on the provided id
+        /// Find and returns a single category based on the provided id or null
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Category</returns>
         Task<Category> FindByIdAsync(int id);
+
+        /// <summary>
+        /// Find and returns a single category based on the provided name or null
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns>Category or Null</returns>
+        Task<Category> FindByName(string name);
 
         /// <summary>
         /// Returns all the categories from the categories table

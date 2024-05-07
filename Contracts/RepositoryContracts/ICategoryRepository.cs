@@ -8,11 +8,6 @@ namespace Contracts.RepositoryContracts
 {
     public interface ICategoryRepository : IRepository<Category>
     {
-        /// <summary>
-        /// Find a category by its name or return null
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns>Category or Null</returns>
-        Task<Category> FindByName(string name);
+ 
     }
 }
