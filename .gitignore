@@ -13,6 +13,11 @@
 *.userosscache
 *.sln.docstates
 
+/BookStore/wwwroot/bootstrap/
+/BookStore/wwwroot/jquery/
+/BookStore/wwwroot/jquery-validate/
+/BookStore/wwwroot/jquery-validation-unobtrusive/
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 

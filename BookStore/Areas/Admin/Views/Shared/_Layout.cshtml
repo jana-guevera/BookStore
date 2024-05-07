@@ -34,12 +34,13 @@
             </div>
         </nav>
 
-        <div class="container-fluid">
+        <div class="container-fluid mt-3 w-75">
             @RenderBody()
         </div>
     </div>
 
     <partial name="_JsScriptLinksPartialView">
+    <partial name="_AlertsPartialView" />
     @RenderSection("Scripts", required:false);
 </body>
 </html>

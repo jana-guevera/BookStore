@@ -1,0 +1,32 @@
+﻿<script>
+	toastr.options = {
+		'closeButton': true,
+		'debug': false,
+		'newestOnTop': false,
+		'progressBar': false,
+		'positionClass': 'toast-top-right',
+		'preventDuplicates': false,
+		'showDuration': '1000',
+		'hideDuration': '1000',
+		'timeOut': '5000',
+		'extendedTimeOut': '1000',
+		'showEasing': 'swing',
+		'hideEasing': 'linear',
+		'showMethod': 'fadeIn',
+		'hideMethod': 'fadeOut',
+	};
+</script>
+
+@if (TempData["success"] != null)
+{
+	<script type="text/javascript">
+		toastr.success("@TempData["success"]");
+	</script>
+}
+
+@if (TempData["error"] != null)
+{
+	<script type="text/javascript">
+		toastr.error("@TempData["error"]");
+	</script>
+}

@@ -5,7 +5,13 @@
 }
 
 
-<h2>Categories</h2>
+<div class="d-flex justify-content-between align-items-center border-bottom mb-3">
+    <h2>Categories</h2>
+    <div>
+        <a asp-area="admin" asp-controller="category" asp-action="create" 
+        class="btn btn-success">Add New</a>
+    </div>
+</div>
 
 <table class="table table-striped" style="width:100%;">
     <thead>
@@ -26,8 +32,10 @@
                     <a class="btn btn-primary" asp-area="admin" asp-controller="category" 
                     asp-action="edit" asp-route-id="@category.Id">Edit</a>
 
-                    <a class="btn btn-danger" asp-area="admin" asp-controller="category" 
-                    asp-action="remove" asp-route-id="@category.Id">Remove</a>
+                    <form class="d-inline" asp-area="admin" asp-controller="category" asp-action="remove" method="post">
+                        <input type="number" name="Id" id="Id" value="@category.Id" hidden/>
+                        <button class="btn btn-danger" type="submit">Remove</button>
+                    </form>
                 </td>
             </tr>
         }
@@ -40,6 +48,26 @@
             columnDefs: [
                 { targets: "_all", className: 'dt-head-left dt-body-left' }
             ]
+        });
+
+        const form = $("form");
+
+        form.on("submit", function (e) {
+            e.preventDefault();
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $(this).unbind('submit').submit()
+                } 
+            });
         });
     </script>
 }
