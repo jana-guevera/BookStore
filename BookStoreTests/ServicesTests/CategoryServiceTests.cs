@@ -63,7 +63,7 @@ namespace BookStoreTests.ServicesTests
         {
             // Arrange
             Category category = new Category() { Name = "Peter Parker", DisplayOrder = 1 };
-            _categoryRepositoryMock.Setup(x => x.FindOneAsync(x => x.Name == category.Name)).ReturnsAsync(category);
+            _categoryRepositoryMock.Setup(x => x.FindOneByNameAsync(It.IsAny<string>())).ReturnsAsync(category);
 
             // Act and Assert
             await Assert.ThrowsAsync<UniqueValidationException>(async () =>
@@ -80,7 +80,7 @@ namespace BookStoreTests.ServicesTests
             Category category = new Category() { Name = name, DisplayOrder = order };
             Category existingCategory = null;
 
-            _categoryRepositoryMock.Setup(x => x.FindOneAsync(x => x.Name == category.Name))
+            _categoryRepositoryMock.Setup(x => x.FindOneByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync(existingCategory);
 
             // Act

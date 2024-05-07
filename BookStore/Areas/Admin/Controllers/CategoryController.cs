@@ -41,7 +41,7 @@ namespace BookStore.Areas.Admin.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            Category category = await _categoryService.FindByIdAsync(id);
+            Category category = await _categoryService.FindOneByIdAsync(id);
 
             if (category == null)
             {
@@ -82,7 +82,7 @@ namespace BookStore.Areas.Admin.Controllers
         [AcceptVerbs("Get", "Post")]
         public async Task<IActionResult> IsCategoryExist(string name, int? Id)
         {
-            Category category = await _categoryService.FindByName(name);
+            Category category = await _categoryService.FindOneByNameAsync(name);
 
             if (category == null) return Json(true);
 

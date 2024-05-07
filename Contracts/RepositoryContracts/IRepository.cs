@@ -30,20 +30,6 @@ namespace Contracts.RepositoryContracts
         Task<T> RemoveAsync(T record);
 
         /// <summary>
-        /// Find and returns single <typeparamref name="T"/> based on the provided expression
-        /// </summary>
-        /// <param name="filter"></param>
-        /// <returns><typeparamref name="T"/></returns>
-        Task<T> FindOneAsync(Expression<Func<T, bool>> filter);
-
-        /// <summary>
-        /// Find and returns multiple <typeparamref name="T"/> based on the provided expression
-        /// </summary>
-        /// <param name="filter"></param>
-        /// <returns></returns>
-        Task<IEnumerable<T>> FindManyAsync(Expression<Func<T, bool>> filter);
-
-        /// <summary>
         /// Returns all the <typeparamref name="T"/> from the table
         /// </summary>
         /// <returns></returns>

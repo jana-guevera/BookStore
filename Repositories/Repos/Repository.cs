@@ -28,34 +28,24 @@ namespace Repositories.Repos
             return record;
         }
 
-        public async Task<IEnumerable<T>> FindManyAsync(Expression<Func<T, bool>> filter)
-        {
-            return await _dbSet.Where(filter).ToListAsync();
-        }
+		public async Task<T> UpdateAsync(T record)
+		{
+			_dbSet.Update(record);
+			await _dbContext.SaveChangesAsync();
+			return record;
+		}
 
-        public async Task<T> FindOneAsync(Expression<Func<T, bool>> filter)
-        {
-            return await _dbSet.FirstOrDefaultAsync(filter);
-        }
+		public async Task<T> RemoveAsync(T record)
+		{
+			_dbSet.Attach(record);
+			_dbSet.Remove(record);
+			await _dbContext.SaveChangesAsync();
+			return record;
+		}
 
-        public async Task<IEnumerable<T>> GetAllAsync()
+		public async Task<IEnumerable<T>> GetAllAsync()
         {
             return await _dbSet.ToListAsync();
         }
-
-        public async Task<T> RemoveAsync(T record)
-        {
-            _dbSet.Attach(record);
-            _dbSet.Remove(record);
-            await _dbContext.SaveChangesAsync();
-            return record;
-        }
-
-        public async Task<T> UpdateAsync(T record)
-        {
-            _dbSet.Update(record);
-            await _dbContext.SaveChangesAsync();
-            return record;
-        }
-    }
+	}
 }

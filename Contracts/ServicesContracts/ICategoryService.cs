@@ -33,20 +33,20 @@ namespace Contracts.ServicesContracts
         /// Find and returns a single category based on the provided id or null
         /// </summary>
         /// <param name="id"></param>
-        /// <returns>Category</returns>
-        Task<Category> FindByIdAsync(int id);
+        /// <returns>Category or Null</returns>
+        Task<Category> FindOneByIdAsync(int id);
 
         /// <summary>
         /// Find and returns a single category based on the provided name or null
         /// </summary>
         /// <param name="name"></param>
         /// <returns>Category or Null</returns>
-        Task<Category> FindByName(string name);
+        Task<Category> FindOneByNameAsync(string name);
 
         /// <summary>
         /// Returns all the categories from the categories table
         /// </summary>
-        /// <returns>IEnumerable<Category></returns>
+        /// <returns>List of categories</returns>
         Task<IEnumerable<Category>> GetAllAsync();
     }
 }

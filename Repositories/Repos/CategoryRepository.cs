@@ -14,5 +14,15 @@ namespace Repositories.Repos
         public CategoryRepository(BookStoreDbContext dbContext) : base(dbContext)
         {
         }
-    }
+
+		public async Task<Category> FindOneByIdAsync(int id)
+		{
+			return await _dbSet.FirstOrDefaultAsync(x => x.Id == id);
+		}
+
+		public async Task<Category> FindOneByNameAsync(string name)
+		{
+			return await _dbSet.FirstOrDefaultAsync(x => x.Name == name);
+		}
+	}
 }

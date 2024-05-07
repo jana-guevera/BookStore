@@ -26,7 +26,7 @@ namespace Services
             ValidationHelper.ModelValidation(category);
 
             // Check if there is an existing category with the same name and throw error
-            Category existingCategory = await _categoryRepository.FindOneAsync(x => x.Name == category.Name);
+            Category existingCategory = await _categoryRepository.FindOneByNameAsync(category.Name);
             if (existingCategory != null)
             {
                 throw new UniqueValidationException("Category Already Exists");
@@ -46,9 +46,9 @@ namespace Services
         {
             if (category == null) throw new NullArgumentException("Category is null");
 
-            Category existingCategory = await _categoryRepository.FindOneAsync(x => x.Id == category.Id);
+            Category existingCategory = await _categoryRepository.FindOneByNameAsync(category.Name);
 
-            if (existingCategory == null) return null;
+            if (existingCategory == null || existingCategory.Id == category.Id) return null;
 
             existingCategory.Name = category.Name;
             existingCategory.DisplayOrder = category.DisplayOrder;
@@ -56,19 +56,19 @@ namespace Services
             return await _categoryRepository.UpdateAsync(existingCategory);
         }
 
-        public async Task<Category> FindByIdAsync(int id)
+        public async Task<Category> FindOneByIdAsync(int id)
         {
-            return await _categoryRepository.FindOneAsync(x => x.Id == id);
+            return await _categoryRepository.FindOneByIdAsync(id);
         }   
 
-        public async Task<Category> FindByName(string name)
+        public async Task<Category> FindOneByNameAsync(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
                 throw new NullArgumentException("Empty category name");
             }
 
-            return await _categoryRepository.FindOneAsync(x => x.Name == name);
+            return await _categoryRepository.FindOneByNameAsync(name);
         }
 
         public async Task<IEnumerable<Category>> GetAllAsync()
