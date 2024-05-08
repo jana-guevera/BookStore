@@ -1,4 +1,5 @@
-﻿using Contracts.ServicesContracts;
+﻿using BookStore.Dtos.CategoryDtos;
+using Contracts.ServicesContracts;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -19,7 +20,19 @@ namespace BookStore.Areas.Admin.Controllers
         public async Task<IActionResult> Index()
         {
             IEnumerable<Category> categories = await _categoryService.GetAllAsync();
-            return View(categories);
+            List<CategoryDto> categoryDtos = new List<CategoryDto>();
+
+            foreach (Category category in categories)
+            {
+                categoryDtos.Add(new CategoryDto()
+                {
+                    Id = category.Id,
+                    Name = category.Name,
+                    DisplayOrder = category.DisplayOrder,
+                });
+            }
+
+            return View(categoryDtos);
         }
 
         public IActionResult Create()
@@ -28,11 +41,16 @@ namespace BookStore.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Category category) {
+        public async Task<IActionResult> Create(CategoryDto categoryDto) {
             if (!ModelState.IsValid)
             {
-                return View(category);
+                return View(categoryDto);
             }
+
+            Category category = new Category() { 
+                Name = categoryDto.Name, 
+                DisplayOrder = (int) categoryDto.DisplayOrder 
+            };
 
             await _categoryService.AddAsync(category);
             TempData["success"] = "Category added successfully";
@@ -48,16 +66,29 @@ namespace BookStore.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            return View(category);
+            CategoryDto categoryDto = new CategoryDto() {
+                Id = category.Id,
+                Name = category.Name,
+                DisplayOrder = category.DisplayOrder,
+            };
+
+            return View(categoryDto);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Category category)
+        public async Task<IActionResult> Edit(CategoryDto categoryDto)
         {
             if (!ModelState.IsValid)
             {
-                return View(category);
+                return View(categoryDto);
             }
+
+            Category category = new Category()
+            {
+                Id = categoryDto.Id,
+                Name = categoryDto.Name,
+                DisplayOrder = (int) categoryDto.DisplayOrder
+            };
 
             Category updatedCategory = await _categoryService.UpdateAsync(category);
 

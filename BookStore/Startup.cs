@@ -1,3 +1,4 @@
+using Domain;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -22,6 +23,7 @@ namespace BookStore
         {
             services.AddRepositoryServices(Configuration);
             services.AddApplicationServices();
+            services.AddEntityValidationServices();
             services.AddControllersWithViews(options => options.EnableEndpointRouting = false);
         }
 

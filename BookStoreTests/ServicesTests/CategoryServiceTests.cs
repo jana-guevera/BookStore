@@ -1,14 +1,10 @@
 ﻿using Contracts.RepositoryContracts;
 using Contracts.ServicesContracts;
 using Domain.Entities;
-using Domain.ErrorHandling;
+using Domain.Validators;
 using Moq;
 using Services;
-using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+using Services.Exceptions;
 using Xunit;
 
 namespace BookStoreTests.ServicesTests
@@ -23,8 +19,10 @@ namespace BookStoreTests.ServicesTests
 
         public CategoryServiceTests()
         {
+            CategoryValidator validator = new CategoryValidator();
+
             _categoryRepositoryMock = new Mock<ICategoryRepository>();
-            _categoryService = new CategoryService(_categoryRepositoryMock.Object);
+            _categoryService = new CategoryService(_categoryRepositoryMock.Object, validator);
         }
 
         #region Tests for adding category
@@ -52,7 +50,7 @@ namespace BookStoreTests.ServicesTests
             Category category = new Category() { Name = name, DisplayOrder = order };
 
             //Act and Assert
-            await Assert.ThrowsAsync<ModelValidationException>(async () => 
+            await Assert.ThrowsAsync<EntityValidationException>(async () => 
             { 
                 await _categoryService.AddAsync(category); 
             });

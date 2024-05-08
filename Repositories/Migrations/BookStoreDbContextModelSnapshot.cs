@@ -29,9 +29,7 @@ namespace Repositories.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(20)")
-                        .HasMaxLength(20);
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

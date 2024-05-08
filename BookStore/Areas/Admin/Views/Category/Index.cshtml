@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Category>;
+﻿@model IEnumerable<CategoryDto>;
 
 @{
     ViewBag.Title = "Categories";
@@ -23,7 +23,7 @@
     </thead>
 
     <tbody>
-        @foreach (Category category in Model)
+        @foreach (CategoryDto category in Model)
         {
             <tr>
                 <td>@category.Name</td>
