@@ -1,3 +1,4 @@
+using BookStore.Middlewares;
 using Domain;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,7 +25,7 @@ namespace BookStore
             services.AddRepositoryServices(Configuration);
             services.AddApplicationServices();
             services.AddEntityValidationServices();
-            services.AddControllersWithViews(options => options.EnableEndpointRouting = false);
+            services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -34,6 +35,23 @@ namespace BookStore
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.Use(async (context, next) =>
+                {
+                    await next();
+
+                    if (context.Response.StatusCode == 404 && !context.Response.HasStarted)
+                    {
+                        string originalPath = context.Request.Path.Value;
+                        context.Items["originalPath"] = originalPath;
+                        context.Request.Path = "/Error/404";
+                        await next();
+                    }
+                });
+
+                app.UseExceptionHandler("/Error");
+            }   
 
             app.UseStaticFiles();
 
@@ -48,7 +66,10 @@ namespace BookStore
                     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
                 );
 
-                endpoints.MapDefaultControllerRoute();
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}"
+                );
             });
         }
     }

@@ -9,9 +9,9 @@ namespace Services.Exceptions
 	/// </summary>
 	public class NullArgumentException : ApplicationException
 	{
-		public NullArgumentException(string message) : base(message)
-		{
+		public NullArgumentException(string message) : base(message) { }
 
-		}
-	}
+        public NullArgumentException(string message, Exception innerException) : 
+			base(message, innerException) { }
+    }
 }

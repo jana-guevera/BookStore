@@ -1,0 +1,13 @@
+﻿@model ExceptionDetails
+
+<h1>
+    @if (Model.IsApplicationError)
+    {
+        <text>@Model.Message</text>
+    }
+    else
+    {
+        <text>@Model.Message</text>
+        <p>Our developers are working on fixing it</p>
+    }
+</h1>

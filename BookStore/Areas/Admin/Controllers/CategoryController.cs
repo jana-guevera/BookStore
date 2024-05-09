@@ -2,6 +2,7 @@
 using Contracts.ServicesContracts;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Services.Exceptions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

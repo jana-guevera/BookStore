@@ -10,11 +10,17 @@ namespace Services.Exceptions
 	/// </summary>
 	public class EntityValidationException : ApplicationException
 	{
-		public IDictionary<string, string[]> Errors { get; set; }
+		public IDictionary<string, string[]> Errors { get; private set; }
 
 		public EntityValidationException(string message, IDictionary<string, string[]> errors) : base(message)
 		{
 			Errors = errors;
 		}
-	}
+
+        public EntityValidationException(string message, IDictionary<string, string[]> errors,
+			Exception innerException) : base(message, innerException)
+        {
+			Errors = errors;
+        }
+    }
 }

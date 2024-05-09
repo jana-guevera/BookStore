@@ -9,8 +9,11 @@ namespace Services.Exceptions
 	/// </summary>
 	public class UniqueValidationException : ApplicationException
 	{
-		public UniqueValidationException(string message) : base(message)
-		{
+		public UniqueValidationException(string message) : base(message) { }
+
+		public UniqueValidationException(string message, Exception innerException) :
+			base(message, innerException)
+		{ 
 		}
 	}
 }
