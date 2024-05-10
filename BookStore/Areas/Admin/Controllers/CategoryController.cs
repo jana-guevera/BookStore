@@ -64,7 +64,7 @@ namespace BookStore.Areas.Admin.Controllers
 
             if (category == null)
             {
-                return NotFound();
+                throw new ResourceNotFoundException("Category not found");
             }
 
             CategoryDto categoryDto = new CategoryDto() {
@@ -92,8 +92,6 @@ namespace BookStore.Areas.Admin.Controllers
             };
 
             Category updatedCategory = await _categoryService.UpdateAsync(category);
-
-            if(updatedCategory == null) { return NotFound(); }
 			TempData["success"] = "Category updated successfully";
 			return RedirectToAction("Index");
         }

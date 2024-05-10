@@ -41,7 +41,10 @@ namespace Services
 
         public async Task<Category> RemoveAsync(int id)
         {
-            Category category = new Category() { Id = id };
+            Category category = await _categoryRepository.FindOneByIdAsync(id);
+
+            if (category == null) { throw new ResourceNotFoundException("Category not found"); }
+
             return await _categoryRepository.RemoveAsync(category);
         }
 
@@ -52,7 +55,7 @@ namespace Services
 
             // Return null if category doesnt exist 
             Category existingCategory = await _categoryRepository.FindOneByIdAsync(category.Id);
-            if (existingCategory == null) return null;
+            if (existingCategory == null) throw new ResourceNotFoundException("Category not found");
 
             existingCategory.Name = category.Name;
             existingCategory.DisplayOrder = category.DisplayOrder;
