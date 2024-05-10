@@ -59,15 +59,12 @@ namespace BookStore.Controllers
             exceptionDetails.Message = "404 page not found";
             exceptionDetails.StatusCode = statusCode;
             exceptionDetails.IsApplicationError = true;
-            exceptionDetails.ExceptionType = "404";
 
-            if (HttpContext.Items.ContainsKey("originalPath"))
+            var statusCodeResult = HttpContext.Features.Get<IStatusCodeReExecuteFeature>();
+
+            if (statusCodeResult.OriginalPath.Contains("admin"))
             {
-                var originalPath = HttpContext.Items["originalPath"] as string;
-                if (originalPath.Contains("admin"))
-                {
-                    return View("~/Areas/Admin/Views/Error/Index.cshtml", exceptionDetails);
-                }
+                return View("~/Areas/Admin/Views/Error/Index.cshtml", exceptionDetails);
             }
 
             return View("~/Views/Error/Index.cshtml", exceptionDetails);

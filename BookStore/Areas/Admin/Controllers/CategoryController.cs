@@ -2,6 +2,7 @@
 using Contracts.ServicesContracts;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Services.Exceptions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -12,10 +13,12 @@ namespace BookStore.Areas.Admin.Controllers
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService; 
+        private readonly ILogger<CategoryController> _logger;
 
-        public CategoryController(ICategoryService categoryService)
+        public CategoryController(ICategoryService categoryService, ILogger<CategoryController> logger)
         {
             _categoryService = categoryService;
+            _logger = logger;
         }
 
         public async Task<IActionResult> Index()

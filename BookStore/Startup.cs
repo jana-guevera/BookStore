@@ -37,20 +37,8 @@ namespace BookStore
             }
             else
             {
-                app.Use(async (context, next) =>
-                {
-                    await next();
-
-                    if (context.Response.StatusCode == 404 && !context.Response.HasStarted)
-                    {
-                        string originalPath = context.Request.Path.Value;
-                        context.Items["originalPath"] = originalPath;
-                        context.Request.Path = "/Error/404";
-                        await next();
-                    }
-                });
-
                 app.UseExceptionHandler("/Error");
+                app.UseStatusCodePagesWithReExecute("/Error/{0}");
             }   
 
             app.UseStaticFiles();
