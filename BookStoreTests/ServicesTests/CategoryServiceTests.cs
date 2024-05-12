@@ -161,10 +161,34 @@ namespace BookStoreTests.ServicesTests
         }
 
         [Fact]
-        public async void UpdateAsync_ValidCategory_CategoryObject()
+        public async void UpdateAsync_ValidCategoryWithSameName_CategoryObject()
         {
             // Arrange
             Category updatingCategory = new Category() { Id = 1, Name = "Scifi", DisplayOrder = 10 };
+            Category existingCategory = new Category() { Id = 1, Name = "Scifi", DisplayOrder = 5 };
+            Category updatedCategory = new Category() { Id = 1, Name = "Scifi", DisplayOrder = 10 };
+            Category diffCategory = null;
+
+            _categoryRepositoryMock.Setup(x => x.FindOneByIdAsync(updatingCategory.Id))
+                .ReturnsAsync(existingCategory);
+
+            _categoryRepositoryMock.Setup(x => x.FindOneByNameAsync(updatingCategory.Name))
+                .ReturnsAsync(diffCategory);
+
+            _categoryRepositoryMock.Setup(x => x.UpdateAsync(It.IsAny<Category>())).ReturnsAsync(updatedCategory);
+
+            // Act
+            Category result = await _categoryService.UpdateAsync(updatingCategory);
+
+            // Assert
+            _categoryRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<Category>()), Times.Once);
+        }
+
+        [Fact]
+        public async void UpdateAsync_ValidCategoryWithDiffName_CategoryObject()
+        {
+            // Arrange
+            Category updatingCategory = new Category() { Id = 1, Name = "Horror", DisplayOrder = 10 };
             Category existingCategory = new Category() { Id = 1, Name = "Scifi", DisplayOrder = 5 };
             Category updatedCategory = new Category() { Id = 1, Name = "Scifi", DisplayOrder = 10 };
             Category diffCategory = null;
