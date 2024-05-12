@@ -2,13 +2,21 @@
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Services.Exceptions;
 using System;
+using System.Linq;
 
 namespace BookStore.Controllers
 {
     public class ErrorController : Controller
     {
+        private readonly ILogger<ErrorController> _logger;
+
+        public ErrorController(ILogger<ErrorController> logger) 
+        {
+            _logger = logger;
+        }
 
         [Route("Error")]
         public IActionResult Error()
@@ -42,6 +50,14 @@ namespace BookStore.Controllers
                 }
             }
 
+            // Log
+            string stacktrace = exceptionHandlerPathFeature.Error.StackTrace
+                .Split(Environment.NewLine)
+                .FirstOrDefault();
+
+            _logger.LogError("{exception} occured at path: {path} \n" + stacktrace,
+                exceptionType.Name, exceptionHandlerPathFeature.Path);
+
             HttpContext.Response.StatusCode = exceptionDetails.StatusCode;
 
             if (exceptionHandlerPathFeature.Path.Contains("admin"))
@@ -66,6 +82,9 @@ namespace BookStore.Controllers
             {
                 return View("~/Areas/Admin/Views/Error/Index.cshtml", exceptionDetails);
             }
+
+            //Log
+            _logger.LogWarning("404 page not found. Path: {path}", statusCodeResult.OriginalPath);
 
             return View("~/Views/Error/Index.cshtml", exceptionDetails);
         }
