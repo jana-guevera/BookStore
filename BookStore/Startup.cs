@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Repositories;
 using Services;
 using Serilog;
+using BookStore.Middlewares;
 
 namespace BookStore
 {

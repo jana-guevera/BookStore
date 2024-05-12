@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Threading.Tasks;
 
@@ -24,7 +25,7 @@ namespace BookStore.Middlewares
             }
             catch (Exception e)
             {
-                var type = e.GetType().ToString();
+                var type = e.InnerException.GetType();
                 await httpContext.Response.WriteAsync("Internal Server Error");
             }
         }

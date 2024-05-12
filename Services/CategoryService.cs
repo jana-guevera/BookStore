@@ -39,6 +39,38 @@ namespace Services
             return await _categoryRepository.AddAsync(category);
         }
 
+        public async Task<Category> UpdateAsync(Category category)
+        {
+            // Check if the input category is null and throw error
+            if (category == null) throw new NullArgumentException("Category is null");
+
+            // Check if category data is not valid and throw error
+            IDictionary<string, string[]> errors = _categoryValidator.ValidateModel(category);
+            if (errors != null) throw new EntityValidationException("Category entity validation failed", errors);
+
+            // Check if the category doesnt exist and throw error
+            Category existingCategory = await _categoryRepository.FindOneByIdAsync(category.Id);
+            if (existingCategory == null) throw new ResourceNotFoundException("Category not found");
+
+            // Check if cateory name has not been changed and update the category
+            if (string.Equals(category.Name, existingCategory.Name))
+            {
+                existingCategory.Name = category.Name;
+                existingCategory.DisplayOrder = category.DisplayOrder;
+                return await _categoryRepository.UpdateAsync(existingCategory);
+            }
+
+            // If category with same name exist throw error
+            Category categoryWithSameName = await _categoryRepository.FindOneByNameAsync(category.Name);
+            if (categoryWithSameName != null) throw new UniqueValidationException("Category already exist");
+
+            existingCategory.Name = category.Name;
+            existingCategory.DisplayOrder = category.DisplayOrder;
+
+            // Save the updated category to db
+            return await _categoryRepository.UpdateAsync(existingCategory);
+        }
+
         public async Task<Category> RemoveAsync(int id)
         {
             Category category = await _categoryRepository.FindOneByIdAsync(id);
@@ -46,32 +78,6 @@ namespace Services
             if (category == null) { throw new ResourceNotFoundException("Category not found"); }
 
             return await _categoryRepository.RemoveAsync(category);
-        }
-
-        public async Task<Category> UpdateAsync(Category category)
-        {
-            // Check if category is null and throw error
-            if (category == null) throw new NullArgumentException("Category is null");
-
-            // Return null if category doesnt exist 
-            Category existingCategory = await _categoryRepository.FindOneByIdAsync(category.Id);
-            if (existingCategory == null) throw new ResourceNotFoundException("Category not found");
-
-            existingCategory.Name = category.Name;
-            existingCategory.DisplayOrder = category.DisplayOrder;
-
-            // If cateory name has not been changed
-            if (string.Equals(category.Name, existingCategory.Name))
-            {
-                return await _categoryRepository.UpdateAsync(existingCategory);
-            }
-
-            // If category with same name exist throw uniqu validation exception
-            Category categoryWithSameName = await _categoryRepository.FindOneByNameAsync(category.Name);
-            if (categoryWithSameName != null) throw new UniqueValidationException("Category already exist");
-            
-            // Save the updated category to db
-            return await _categoryRepository.UpdateAsync(existingCategory);
         }
 
         public async Task<Category> FindOneByIdAsync(int id)
