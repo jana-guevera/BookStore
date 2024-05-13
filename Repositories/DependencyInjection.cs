@@ -1,7 +1,9 @@
 ﻿using Contracts.RepositoryContracts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Repositories.Caching;
 using Repositories.Database;
 using Repositories.Repos;
 
@@ -16,6 +18,7 @@ namespace Repositories
 
             // Repository Service
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddSingleton<CustomMemoryCache>();
 
             return services;
         }
