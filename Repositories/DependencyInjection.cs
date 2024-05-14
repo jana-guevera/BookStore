@@ -14,11 +14,11 @@ namespace Repositories
         public static IServiceCollection AddRepositoryServices(this IServiceCollection services, IConfiguration configuration) {
             // DbContext Service
             services.AddDbContext<BookStoreDbContext>(options => 
-                                   options.UseSqlServer(configuration.GetConnectionString("default")));
+                                   options.UseSqlServer(configuration.GetConnectionString("db")));
 
             // Repository Service
             services.AddScoped<ICategoryRepository, CategoryRepository>();
-            services.AddSingleton<CustomMemoryCache>();
+            services.AddSingleton<ICacheService, RedisCache>();
 
             return services;
         }

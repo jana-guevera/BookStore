@@ -1,11 +1,8 @@
 ﻿using Contracts.RepositoryContracts;
-using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Repositories.Caching;
 using Repositories.Database;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -15,14 +12,14 @@ namespace Repositories.Repos
     {
         protected readonly BookStoreDbContext _dbContext;
         protected readonly DbSet<T> _dbSet;
-        protected readonly CustomMemoryCache _memoryCache;
+        protected readonly ICacheService _cache;
         protected readonly string _parentCacheKey;
 
-        public Repository(BookStoreDbContext dbContext, CustomMemoryCache memoryCache, string parentCacheKey)
+        public Repository(BookStoreDbContext dbContext, ICacheService cache, string parentCacheKey)
         {
             _dbContext = dbContext;
             _dbSet = dbContext.Set<T>();    
-            _memoryCache = memoryCache;
+            _cache = cache;
             _parentCacheKey = parentCacheKey;
         }
 
@@ -31,7 +28,7 @@ namespace Repositories.Repos
             _dbSet.Add(record);
             await _dbContext.SaveChangesAsync();
 
-            _memoryCache.ClearCache(_parentCacheKey);
+            await _cache.ClearParentAsync(_parentCacheKey);
             return record;
         }
 
@@ -40,7 +37,7 @@ namespace Repositories.Repos
 			_dbSet.Update(record);
 			await _dbContext.SaveChangesAsync();
 
-            _memoryCache.ClearCache(_parentCacheKey);
+            await _cache.ClearParentAsync(_parentCacheKey);
             return record;
 		}
 
@@ -50,18 +47,18 @@ namespace Repositories.Repos
 			_dbSet.Remove(record);
 			await _dbContext.SaveChangesAsync();
 
-            _memoryCache.ClearCache(_parentCacheKey);
+            await _cache.ClearParentAsync(_parentCacheKey);
 			return record;
 		}
 
 		public async Task<IEnumerable<T>> GetAllAsync()
         {
-            var records = _memoryCache.GetCache<IEnumerable<T>>(_parentCacheKey, "");
+            var records = await _cache.GetAsync<IEnumerable<T>>(_parentCacheKey, "");
 
             if (records == null)
             {
                 records = await _dbSet.ToListAsync();
-                _memoryCache.SetCache<IEnumerable<T>>(_parentCacheKey, "", records);
+                await _cache.SetAsync<IEnumerable<T>>(_parentCacheKey, "", records);
             }
 
             return records;

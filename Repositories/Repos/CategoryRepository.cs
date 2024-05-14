@@ -13,22 +13,21 @@ namespace Repositories.Repos
 {
     public class CategoryRepository : Repository<Category>, ICategoryRepository
     {
-		private static readonly string parenCachetKey = "Category_";
-        public CategoryRepository(BookStoreDbContext dbContext, CustomMemoryCache memoryCache) 
-			: base(dbContext, memoryCache, parenCachetKey)
+        public CategoryRepository(BookStoreDbContext dbContext, ICacheService cache) 
+			: base(dbContext, cache, "Category_")
         {
         }
 
 		public async Task<Category> FindOneByIdAsync(int id)
 		{
-			var category = _memoryCache.GetCache<Category>(parenCachetKey, id.ToString());
+			var category = await _cache.GetAsync<Category>(_parentCacheKey, id.ToString());
 
 			if (category == null)
 			{
 				category = await _dbSet.FirstOrDefaultAsync(x => x.Id == id);
 				if(category != null)
 				{
-					_memoryCache.SetCache<Category>(_parentCacheKey, id.ToString(), category);
+					await _cache.SetAsync<Category>(_parentCacheKey, id.ToString(), category);
 				}
             }
 
