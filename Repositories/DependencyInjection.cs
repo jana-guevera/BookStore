@@ -18,7 +18,7 @@ namespace Repositories
 
             // Repository Service
             services.AddScoped<ICategoryRepository, CategoryRepository>();
-            services.AddSingleton<ICacheService, RedisCache>();
+            services.AddSingleton<ICacheService, CustomMemoryCache>();
 
             return services;
         }

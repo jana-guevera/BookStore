@@ -1,4 +1,5 @@
-﻿using BookStore.Dtos.CategoryDtos;
+﻿using AutoMapper;
+using BookStore.Dtos.CategoryDtos;
 using Contracts.ServicesContracts;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -14,29 +15,22 @@ namespace BookStore.Areas.Admin.Controllers
     [Area("Admin")]
     public class CategoryController : Controller
     {
-        private readonly ICategoryService _categoryService; 
+        private readonly ICategoryService _categoryService;
+        private readonly IMapper _mapper;
         private readonly ILogger<CategoryController> _logger;
 
-        public CategoryController(ICategoryService categoryService, ILogger<CategoryController> logger)
+        public CategoryController(ICategoryService categoryService, IMapper mapper,
+            ILogger<CategoryController> logger)
         {
             _categoryService = categoryService;
             _logger = logger;
+            _mapper = mapper;
         }
 
         public async Task<IActionResult> Index()
         {
             IEnumerable<Category> categories = await _categoryService.GetAllAsync();
-            List<CategoryDto> categoryDtos = new List<CategoryDto>();
-
-            foreach (Category category in categories)
-            {
-                categoryDtos.Add(new CategoryDto()
-                {
-                    Id = category.Id,
-                    Name = category.Name,
-                    DisplayOrder = category.DisplayOrder,
-                });
-            }
+            IEnumerable<CategoryDto> categoryDtos = _mapper.Map<IEnumerable<CategoryDto>>(categories);
 
             return View(categoryDtos);
         }
@@ -53,10 +47,7 @@ namespace BookStore.Areas.Admin.Controllers
                 return View(categoryDto);
             }
 
-            Category category = new Category() { 
-                Name = categoryDto.Name, 
-                DisplayOrder = (int) categoryDto.DisplayOrder 
-            };
+            Category category = _mapper.Map<Category>(categoryDto); 
 
             await _categoryService.AddAsync(category);
             TempData["success"] = "Category added successfully";
@@ -72,11 +63,7 @@ namespace BookStore.Areas.Admin.Controllers
                 throw new ResourceNotFoundException("Category not found");
             }
 
-            CategoryDto categoryDto = new CategoryDto() {
-                Id = category.Id,
-                Name = category.Name,
-                DisplayOrder = category.DisplayOrder,
-            };
+            CategoryDto categoryDto = _mapper.Map<CategoryDto>(category);
 
             return View(categoryDto);
         }
@@ -89,12 +76,7 @@ namespace BookStore.Areas.Admin.Controllers
                 return View(categoryDto);
             }
 
-            Category category = new Category()
-            {
-                Id = categoryDto.Id,
-                Name = categoryDto.Name,
-                DisplayOrder = (int) categoryDto.DisplayOrder
-            };
+            Category category = _mapper.Map<Category>(categoryDto);
 
             Category updatedCategory = await _categoryService.UpdateAsync(category);
 			TempData["success"] = "Category updated successfully";
